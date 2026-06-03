@@ -8,11 +8,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
+app.get('/teste-env', (req, res) => {
     res.json({
-        status: true,
-        sistema: 'API Comprovei',
-        versao: '1.0'
+        variaveis: Object.keys(process.env).filter(k => k.includes('COMPROVEI'))
     });
 });
 
