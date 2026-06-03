@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
         status: true,
         sistema: 'API Comprovei',
         versao: '1.0'
-    });
+    }); 
 });
 
 app.get('/teste-env', (req, res) => {
