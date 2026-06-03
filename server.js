@@ -60,3 +60,10 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor iniciado na porta ${PORT}`);
 });
+
+pp.get('/teste-env', (req, res) => {
+    res.json({
+        usuario: process.env.COMPROVEI_USER ? 'OK' : 'VAZIO',
+        senha: process.env.COMPROVEI_PASS ? 'OK' : 'VAZIO'
+    });
+});
