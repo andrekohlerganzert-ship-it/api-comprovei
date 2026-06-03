@@ -8,9 +8,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/teste-env', (req, res) => {
+app.get('/', (req, res) => {
     res.json({
-        variaveis: Object.keys(process.env).filter(k => k.includes('COMPROVEI'))
+        status: true,
+        sistema: 'API Comprovei',
+        versao: '1.0'
     });
 });
 
@@ -26,17 +28,18 @@ app.post('/ws613', async (req, res) => {
         const response = await axios.post(
             'https://console-api.comprovei.com/exports/documentSAC',
             {
+                formato_exportacao: req.body.formato_exportacao || 'json',
+                filtros: req.body.filtros,
+                campos_inclusos: req.body.campos_inclusos
+            },
+            {
                 headers: {
                     username: process.env.COMPROVEI_USER,
-                    password: process.env.COMPROVEI_PASS
+                    password: process.env.COMPROVEI_PASS,
+                    'Content-Type': 'application/json'
                 },
-                body: {
-                    formato_exportacao: req.body.formato_exportacao || 'json',
-                    filtros: req.body.filtros,
-                    campos_inclusos: req.body.campos_inclusos
-                }
-            },
-            { timeout: 300000 }
+                timeout: 300000
+            }
         );
 
         return res.json(response.data);
@@ -45,6 +48,7 @@ app.post('/ws613', async (req, res) => {
         return res.status(500).json({
             erro: true,
             mensagem: 'Erro ao consultar Comprovei',
+            status: error.response?.status || null,
             detalhe: error.response?.data || error.message
         });
     }
